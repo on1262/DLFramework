@@ -14,10 +14,9 @@ import missingno as msno
 from .generic import reinit_dir, remove_slash
 from .colorful_logging import logger
 
-'''
-    用于分位数回归的作图, 通过线性插值得到待测点所对应的分位数, 使得数据的分布不会改变出图的色彩多样性
-'''
+
 class HueColorNormlize(ColorNorm):
+    '''用于分位数回归的作图, 通过线性插值得到待测点所对应的分位数, 使得数据的分布不会改变出图的色彩多样性'''
     def __init__(self, data:np.ndarray) -> None:
         super().__init__(vmin=data.min(), vmax=data.max(), clip=False)
         n_points = 21
@@ -329,12 +328,12 @@ def plot_category_dist(data:pd.DataFrame, type_dict:dict, output_dir=None):
             plt.savefig(os.path.join(output_dir, f'{name}_dist.png'))
             plt.close()
 
-def plot_model_comparison(csv_path, title, out_path):
+def plot_model_comparison(x_col:str, y_col:str, csv_path:str, title:str, out_path):
     '''输出模型对比的散点图'''
     df = pd.read_csv(csv_path, encoding='utf-8')
     plt.figure(figsize=(10,10))
     # columns=[model_name, hyper_params, metricA, metricB]
-    sns.scatterplot(data=df, x="4cls_accuracy", y="robust_AUC",
+    sns.scatterplot(data=df, x=x_col, y=y_col,
                 hue="model",
                 palette="ch:r=-.2,d=.3_r", linewidth=0)
     plt.title(title)

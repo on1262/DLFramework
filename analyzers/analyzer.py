@@ -3,21 +3,18 @@ import tools
 import os
 from tools import logger as logger
 from .container import DataContainer
-from .feature_explore import FeatureExplorer
-from .method_nearest_cls import BaselineNearestClsAnalyzer
-from datasets import MIMICIVDataset
+from datasets.abstract_dataset import AbstractDataset
 
 
 class Analyzer:
-    def __init__(self, params:list, dataset:MIMICIVDataset) -> None:
+    def __init__(self, params:list, dataset:AbstractDataset) -> None:
         '''
         params: 启动脚本, 否则需要手动run_sub_analyzer, 可以是None
         dataset: 数据集
         '''
         self.container = DataContainer(dataset)
         self.analyzer_dict = {
-            'nearest_4cls': BaselineNearestClsAnalyzer,
-            'feature_explore': FeatureExplorer,
+            # TODO
         }
         if params is not None:
             for name in params:

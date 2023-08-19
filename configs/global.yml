@@ -1,0 +1,7 @@
+---
+
+seed: 1000
+
+paths:
+    model_weights: ./model_weights
+    output: ./outputs
