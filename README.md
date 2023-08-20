@@ -9,6 +9,14 @@ A basic framework for deep learning
 - Extendable and flexible trainer
 - Useful tools for visualization
 
+## Deployment
+
+1. Create new repository on Github/Gitlab, change default branch to `main`
+2. `git clone --bare git@git.tsinghua.edu.cn:chenyt19/DLFramework.git`
+3. `cd DLFramework.git`
+4. `git push --mirror new_repo_url`
+5. Clone new repository to server and start developing
+
 ## Concepts
 
 **Model**: A model consists of network structure and hyper-parameters. Create a derived model by changing versions in yaml configuration.
