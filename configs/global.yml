@@ -1,7 +1,14 @@
 ---
 
+# global seed
 seed: 1000
 
+# k-fold validation
+n_fold: 5
+
+# available device
+devices: ['cuda:0', 'cuda:1']
+
 paths:
-    model_weights: ./model_weights
+    saved_model: ./saved_model
     output: ./outputs

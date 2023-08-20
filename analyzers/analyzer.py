@@ -7,28 +7,30 @@ from datasets.abstract_dataset import AbstractDataset
 
 
 class Analyzer:
-    def __init__(self, params:list, dataset:AbstractDataset) -> None:
+    def __init__(self, name_list:list, dataset:AbstractDataset) -> None:
         '''
         params: 启动脚本, 否则需要手动run_sub_analyzer, 可以是None
-        dataset: 数据集
         '''
-        self.container = DataContainer(dataset)
+        self.container = DataContainer()
         self.analyzer_dict = {
-            # TODO
+            "TemplateAnalyzer": None
         }
-        if params is not None:
-            for name in params:
-                for label in self.analyzer_dict.keys():
-                    if label in name:
-                        self.run_sub_analyzer(name, label)
-                        break
-
+        self.dataset_dict = {
+            "default": AbstractDataset
+        }
+        for name in name_list:
+            for label in self.analyzer_dict.keys():
+                if label in name: # analyzer@version
+                    if label in self.dataset_dict.keys():
+                        self.container.register_dataset(self.dataset_dict[label])
+                    else:
+                        self.container.register_dataset(self.dataset_dict["default"])
+                    self.run_sub_analyzer(name, label)
+                    break
         
     def run_sub_analyzer(self, analyzer_name, label):
         logger.info(f'Run Analyzer: {analyzer_name}')
-        params = self.container.get_model_params(analyzer_name)
-        if 'dataset_version' in params:
-            self.container.dataset.load_version(params['dataset_version'])
+        params = self.container.get_analyzer_params(analyzer_name)
         params['analyzer_name'] = analyzer_name
         sub_analyzer = self.analyzer_dict[label](params, self.container)
         sub_analyzer.run()

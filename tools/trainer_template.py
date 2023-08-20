@@ -9,6 +9,7 @@ from tqdm import tqdm
 from tools.colorful_logging import logger
 from tools import GLOBAL_PATH, GLOBAL_CONF
 import numpy as np
+import datetime
 import os
 
 class TrainerTemplate():
@@ -17,7 +18,7 @@ class TrainerTemplate():
         self.params = params
 
         self.analyzer_name = params['analyzer_name']
-        self.model_weights_dir = os.path.join(GLOBAL_PATH['model_weights'])
+        self.model_weights_dir = os.path.join(GLOBAL_PATH['saved_model'])
         if not os.path.exists(self.model_weights_dir):
             tools.reinit_dir(self.model_weights_dir, build=True)
         self.model = None
@@ -100,4 +101,22 @@ class TrainerTemplate():
             torch.save(result_dict, f)
         logger.info(f'Model saved at {save_path}')
 
+    def load(self, load_dir, load_option='latest', suffix='.pt'):
+        '''
+        Load model/opts/params
+        load_option:
+            'latest': load latest model
+            'Epoch_X': load model in X epoch
+        '''
+        if load_option == 'latest':
+            file_path = max([os.path.join(load_dir, fp) for fp in os.listdir(load_dir) if fp.endswith(suffix)], key=os.path.getctime)
+        else:
+            matching_files = [os.path.join(load_dir, f) for f in os.listdir(load_dir) if f.endswith(suffix) and f.startswith(load_option)]
+            file_path = max(matching_files, key=os.path.getctime)
+        logger.info(f'Loading model from {file_path}')
+        with open(file_path, 'wb') as fp:
+            result_dict = torch.load(fp)
+        # load variables
+        self.model = result_dict['model']
+        
 

@@ -1,24 +1,25 @@
-from datasets import MIMICIVDataset
+from datasets.abstract_dataset import AbstractDataset
 import tools
-import os
-
+from tools import logger
+import torch
 
 class DataContainer():
     '''存放数据和一些与模型无关的内容'''
-    def __init__(self, dataset:MIMICIVDataset):
-        self.dataset = dataset
+    def __init__(self):
         self._conf = tools.GLOBAL_CONF['analyzer']['data_container'] # 这部分是global, 对外界不可见
         self.n_fold = self._conf['n_fold']
         self.seed = self._conf['seed']
-        # for feature importance
-        self.register_values = {}
+        self.devices = [torch.device(t) for t in tools.GLOBAL_CONF['devices']]
+        self.dataset = None
 
-    def get_model_params(self, model_name) -> dict:
-        '''根据数据集和模型名不同, 获取所需的模型参数'''
-        paths = tools.GLOBAL_CONF['analyzer'][self.dataset.name()]['paths']
-        params = tools.Config(paths['conf_cache_path'], paths['conf_manual_path'])['model'][model_name]
-        params['paths'] = paths # 添加global config的paths到params中
-        return params
+    def register_dataset(self, dataset_type:type):
+        if not type(self.dataset) == dataset_type:
+            logger.info(f'Register dataset: {dataset_type}')
+            self.dataset = dataset_type
+        else:
+            logger.warning(f'DataContainer will keep dataset instance: {dataset_type}')
     
-    def clear_register(self):
-        self.register_values.clear()
+    def get_analyzer_params(self, analyzer_name) -> dict:
+        '''根据数据集和模型名不同, 获取所需的模型参数'''
+        params = tools.GLOBAL_CONF['analyzers'][analyzer_name]
+        return params.copy()

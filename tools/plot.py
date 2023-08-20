@@ -328,13 +328,14 @@ def plot_category_dist(data:pd.DataFrame, type_dict:dict, output_dir=None):
             plt.savefig(os.path.join(output_dir, f'{name}_dist.png'))
             plt.close()
 
-def plot_model_comparison(x_col:str, y_col:str, csv_path:str, title:str, out_path):
-    '''输出模型对比的散点图'''
-    df = pd.read_csv(csv_path, encoding='utf-8')
+def plot_model_comparison(data:dict, title:str, out_path):
+    '''
+    输出模型性能对比图
+    data: model_name:(x_array,y_array)
+    '''
     plt.figure(figsize=(10,10))
-    # columns=[model_name, hyper_params, metricA, metricB]
-    sns.scatterplot(data=df, x=x_col, y=y_col,
-                hue="model",
-                palette="ch:r=-.2,d=.3_r", linewidth=0)
+    for name, tp in data.items():
+        plt.plot(x=tp[0], y=tp[1], label=name)
     plt.title(title)
     plt.savefig(out_path)
+    plt.close()

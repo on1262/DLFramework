@@ -4,4 +4,7 @@
 
 Finished LossLogger. Add support to loss std.
 
+## 2023.8.20
 
+- Move launch list in main.py to launch_conf.yml
+- Rename model_weights to saved_model

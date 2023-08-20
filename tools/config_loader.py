@@ -32,7 +32,7 @@ class ConfigLoader():
     def __getitem__(self, __key: str):
         return self.glob_conf[__key]
 
-GLOBAL_CONF = ConfigLoader('./configs/global_config.json')
+GLOBAL_CONF = ConfigLoader('./configs/global.yml')
 GLOBAL_PATH = GLOBAL_CONF['paths']
 
 
