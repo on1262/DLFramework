@@ -1,13 +1,16 @@
 ---
 
-# global seed
-seed: 1000
+data_container:
+    # global seed
+    seed: 1000
+    # k-fold validation
+    n_fold: 5
 
-# k-fold validation
-n_fold: 5
+# available devices
+available_devices: ['cuda:0', 'cuda:1']
 
-# available device
-devices: ['cuda:0', 'cuda:1']
+# enable multiprocessing for analyzer launches
+mp_launch: True
 
 paths:
     saved_model: ./saved_model

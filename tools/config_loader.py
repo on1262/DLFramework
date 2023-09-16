@@ -19,7 +19,7 @@ class ConfigLoader():
                 self.glob_conf[dir_name] = {}
                 for file in os.listdir(os.path.join('./configs', dir_name)):
                     with open(os.path.join('./configs', dir_name, file), 'r', encoding='utf-8') as fp:
-                        self.glob_conf[dir_name][file] = yaml.load(fp, Loader=yaml.SafeLoader)
+                        self.glob_conf[dir_name][file.split('.')[0]] = yaml.load(fp, Loader=yaml.SafeLoader)
     
     def process_path(self, root, conf_dict):
         for key in conf_dict.keys():
